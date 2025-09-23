@@ -1,0 +1,43 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 750,
+  "height": 619,
+  "config": { "background": "#F5F5F5", "view": { "stroke": null } },
+  "params": [
+    {
+      "name": "frpThreshold",
+      "value": 100,
+      "bind": { "input": "range", "min": 100, "max": 2000, "step": 10, "name": "FRP Threshold: " }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv"
+  },
+  "transform": [
+    { "calculate": "toNumber(datum.longitude)", "as": "lonNum" },
+    { "calculate": "toNumber(datum.latitude)", "as": "latNum" },
+    { "calculate": "toNumber(datum.frp)", "as": "frpNum" },
+    { "calculate": "toNumber(datum.scan)", "as": "scanNum" },
+    { "calculate": "toNumber(datum.confidence)", "as": "confNum" },
+    { "filter": "datum.confNum > 80 && datum.frpNum > frpThreshold" }
+  ],
+  "mark": { "type": "circle", "opacity": 0.7 },
+  "encoding": {
+    "x": { "field": "lonNum", "type": "quantitative", "title": "Longitude" },
+    "y": { "field": "latNum", "type": "quantitative", "title": "Latitude" },
+    "size": { "field": "scanNum", "type": "quantitative", "title": "Scan" },
+    "color": {
+      "field": "frpNum",
+      "type": "quantitative",
+      "title": "FRP (MW)",
+      "scale": { "domain": [100, 1000, 2000], "range": ["#FFA500", "#FF4500", "#8B0000"] }
+    },
+    "tooltip": [
+      { "field": "acq_date", "type": "temporal", "title": "Date" },
+      { "field": "frpNum", "type": "quantitative", "title": "FRP (MW)" },
+      { "field": "scanNum", "type": "quantitative", "title": "Scan Size" },
+      { "field": "brightness", "type": "quantitative", "title": "Brightness" },
+      { "field": "confNum", "type": "quantitative", "title": "Confidence" }
+    ]
+  }
+}
