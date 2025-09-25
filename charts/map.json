@@ -5,162 +5,83 @@
   "projection": {
     "type": "mercator",
     "scale": 900,
-    "center": [495, -28.25]
+    "center": [134, -28.25]
   },
   "config": {
-    "background": "#F5F5F5", 
-    "view": {
-      "stroke": null  
-    }
+    "background": "#F5F5F5",
+    "view": { "stroke": null }
   },
   "params": [
     {
       "name": "frpThreshold",
       "value": 100,
-      "bind": {
-        "input": "range",
-        "min": 100,
-        "max": 2000,
-        "step": 10,
-        "name": "FRP Threshold: "
-      }
+      "bind": { "input": "range", "min": 100, "max": 2000, "step": 10, "name": "FRP Threshold: " }
     }
   ],
   "layer": [
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/refs/heads/main/data/ne_50m.json",
-        "format": {
-          "type": "topojson",
-          "feature": "ne_50m_admin_0_countries"
-        }
+        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/ne_50m.json",
+        "format": { "type": "topojson", "feature": "ne_50m_ocean" }
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#7cc48f",
-        "stroke": "black"
-      }
+      "mark": { "type": "geoshape", "fill": "skyblue", "stroke": null }
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/refs/heads/main/data/ne_50m.json",
-        "format": {
-          "type": "topojson",
-          "feature": "ne_50m_ocean"
-        }
+        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/ne_50m.json",
+        "format": { "type": "topojson", "feature": "ne_50m_admin_0_countries" }
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": "skyblue",
-        "stroke": null
-      }
+      "mark": { "type": "geoshape", "fill": "#7cc48f", "stroke": "black" }
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/refs/heads/main/data/ne_50m.json",
-        "format": {
-          "type": "topojson",
-          "feature": "ne_50m_admin_1_states_provinces"
-        }
+        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/ne_50m.json",
+        "format": { "type": "topojson", "feature": "ne_50m_admin_1_states_provinces" }
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": null,
-        "stroke": "black"
-      }
+      "mark": { "type": "geoshape", "fill": null, "stroke": "black" }
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/refs/heads/main/data/ne_50m.json",
-        "format": {
-          "type": "topojson",
-          "feature": "ne_50m_graticules_5"
-        }
+        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/ne_50m.json",
+        "format": { "type": "topojson", "feature": "ne_50m_graticules_5" }
       },
-      "mark": {
-        "type": "geoshape",
-        "stroke": "#F5F5F5"
-      }
+      "mark": { "type": "geoshape", "stroke": "#F5F5F5" }
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/refs/heads/main/data/fire_archive_M6_96619.csv"
+        "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv"
       },
       "transform": [
-        {
-          "filter": "datum.confidence > 80 && datum.frp > frpThreshold"
-        },
-        {
-          "sort": [{"field": "frp", "order": "descending"}]
-        }
+        { "filter": "toNumber(datum.confidence) > 70 && toNumber(datum.frp) > frpThreshold" },
+        { "calculate": "toNumber(datum.longitude)", "as": "lonNum" },
+        { "calculate": "toNumber(datum.latitude)", "as": "latNum" },
+        { "calculate": "toNumber(datum.frp)", "as": "frpNum" },
+        { "calculate": "toNumber(datum.scan)", "as": "scanNum" }
       ],
-      "mark": {
-        "type": "circle",
-        "opacity": 0.7
-      },
+      "mark": { "type": "circle", "opacity": 0.7 },
       "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        },
+        "longitude": { "field": "lonNum", "type": "quantitative" },
+        "latitude":  { "field": "latNum", "type": "quantitative" },
         "size": {
-          "field": "scan",
+          "field": "scanNum",
           "type": "quantitative",
           "title": "Scan",
-          "scale": {
-            "domain": [1, 3]
-          },
-          "legend": {
-            "orient": "none",
-            "direction": "vertical",
-            "legendX": 700,
-            "legendY": 290,
-            "title": "Fire Size"
-          }
+          "scale": { "domain": [1, 3] },
+          "legend": { "orient": "none", "direction": "vertical", "legendX": 700, "legendY": 290, "title": "Fire Size" }
         },
         "color": {
-          "field": "frp",
+          "field": "frpNum",
           "type": "quantitative",
           "title": "Fire Radiative Power (FRP)",
-          "scale": {
-            "domain": [100, 1000, 2000],
-            "range": ["#FFA500", "#FF4500", "#8B0000"]
-          },
-          "legend": {
-            "orient": "none",
-            "direction": "vertical",
-            "legendX": 700,
-            "legendY": 45,
-            "title": "FRP"
-          }
+          "scale": { "domain": [100, 1000, 2000], "range": ["#fcc203", "#ff7700", "#bf3304"] },
+          "legend": { "orient": "none", "direction": "vertical", "legendX": 700, "legendY": 45, "title": "FRP" }
         },
         "tooltip": [
-          {
-            "field": "acq_date",
-            "type": "temporal",
-            "title": "Date",
-            "timeUnit": "yearmonthdate",
-            "format": "%d/%m/%Y"
-          },
-          {
-            "field": "frp",
-            "type": "quantitative",
-            "title": "Fire Radiative Power (FRP)"
-          },
-          {
-            "field": "scan",
-            "type": "quantitative",
-            "title": "Scan Size"
-          },
-          {
-            "field": "brightness",
-            "type": "quantitative",
-            "title": "Brightness"
-          }
+          { "field": "acq_date", "type": "nominal", "title": "Date" },
+          { "field": "frpNum", "type": "quantitative", "title": "FRP (MW)" },
+          { "field": "scanNum", "type": "quantitative", "title": "Scan Size" },
+          { "field": "brightness", "type": "quantitative", "title": "Brightness" },
+          { "field": "confidence", "type": "quantitative", "title": "Confidence" }
         ]
       }
     }
