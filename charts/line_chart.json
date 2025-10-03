@@ -1,25 +1,18 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Hotspot counts over time split by Day/Night.",
+  "description": "Hotspot counts over time split by Day (D) and Night (N). Robust date parsing from d/m/yyyy.",
   "width": 750,
   "height": 320,
   "config": { "background": "#F5F5F5", "view": { "stroke": null } },
 
   "data": {
-    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv",
-    "format": {
-      "type": "csv",
-      "parse": { "acq_date": "date:%d/%m/%Y" }
-    }
+    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv"
   },
 
   "params": [
     {
       "name": "dayNightSelect",
-      "select": {
-        "type": "point",
-        "fields": ["daynight"]
-      },
+      "select": { "type": "point", "fields": ["daynight"] },
       "bind": "legend"
     }
   ],
@@ -27,14 +20,17 @@
   "layer": [
     {
       "transform": [
+        { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "aggregate": [{ "op": "count", "as": "hotspots" }],
-          "groupby": ["acq_date", "daynight"]
-        }
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
+          "as": "iso"
+        },
+        { "calculate": "toDate(datum.iso)", "as": "date" },
+        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date", "daynight"] }
       ],
       "mark": { "type": "area", "interpolate": "monotone" },
       "encoding": {
-        "x": { "field": "acq_date", "type": "temporal", "title": "Date" },
+        "x": { "field": "date", "type": "temporal", "title": "Date" },
         "y": { "field": "hotspots", "type": "quantitative", "title": "Hotspot Count", "stack": "zero" },
         "color": {
           "field": "daynight",
@@ -42,47 +38,52 @@
           "title": "Day/Night",
           "scale": { "domain": ["D", "N"], "range": ["#ffa726", "#42a5f5"] }
         },
-        "opacity": {
-          "condition": { "param": "dayNightSelect", "value": 1 },
-          "value": 0.25
-        },
+        "opacity": { "condition": { "param": "dayNightSelect", "value": 1 }, "value": 0.25 },
         "tooltip": [
-          { "field": "acq_date", "type": "temporal", "title": "Date" },
+          { "field": "date", "type": "temporal", "title": "Date" },
           { "field": "daynight", "type": "nominal", "title": "Day/Night" },
           { "field": "hotspots", "type": "quantitative", "title": "Hotspots" }
         ]
       }
     },
+
     {
       "transform": [
+        { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "aggregate": [{ "op": "count", "as": "totalDaily" }],
-          "groupby": ["acq_date"]
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
+          "as": "iso"
         },
+        { "calculate": "toDate(datum.iso)", "as": "date" },
+        { "aggregate": [{ "op": "count", "as": "totalDaily" }], "groupby": ["date"] },
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
       ],
       "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6,4], "strokeWidth": 2 },
       "encoding": {
-        "x": { "field": "acq_date", "type": "temporal" },
+        "x": { "field": "date", "type": "temporal" },
         "tooltip": [
-          { "field": "acq_date", "type": "temporal", "title": "Peak Day" },
+          { "field": "date", "type": "temporal", "title": "Peak Day" },
           { "field": "totalDaily", "type": "quantitative", "title": "Total Hotspots" }
         ]
       }
     },
+
     {
       "transform": [
+        { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "aggregate": [{ "op": "count", "as": "totalDaily" }],
-          "groupby": ["acq_date"]
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
+          "as": "iso"
         },
+        { "calculate": "toDate(datum.iso)", "as": "date" },
+        { "aggregate": [{ "op": "count", "as": "totalDaily" }], "groupby": ["date"] },
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
       ],
       "mark": { "type": "text", "dx": 6, "dy": -8, "fontSize": 12, "fontWeight": "bold", "fill": "#333" },
       "encoding": {
-        "x": { "field": "acq_date", "type": "temporal" },
+        "x": { "field": "date", "type": "temporal" },
         "y": { "value": 0 },
         "text": { "field": "totalDaily", "type": "quantitative", "format": "Peak: {,.0f}" }
       }
