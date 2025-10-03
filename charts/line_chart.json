@@ -1,36 +1,41 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Daily hotspot counts split by Day (D) and Night (N), with legend selection and a peak-day annotation.",
+  "description": "Hotspot counts over time split by Day/Night.",
   "width": 750,
   "height": 320,
   "config": { "background": "#F5F5F5", "view": { "stroke": null } },
+
   "data": {
-    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv"
+    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv",
+    "format": {
+      "type": "csv",
+      "parse": { "acq_date": "date:%d/%m/%Y" }
+    }
   },
 
-"params": [
-  {
-    "name": "dayNightSelect",
-    "select": {
-      "type": "point",
-      "fields": ["daynight"],
-      "on": "click",
-      "toggle": "true"
-    },
-    "bind": "legend"
-  }
-],
-
+  "params": [
+    {
+      "name": "dayNightSelect",
+      "select": {
+        "type": "point",
+        "fields": ["daynight"]
+      },
+      "bind": "legend"
+    }
+  ],
 
   "layer": [
     {
       "transform": [
-        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["acq_date", "daynight"] }
+        {
+          "aggregate": [{ "op": "count", "as": "hotspots" }],
+          "groupby": ["acq_date", "daynight"]
+        }
       ],
       "mark": { "type": "area", "interpolate": "monotone" },
       "encoding": {
         "x": { "field": "acq_date", "type": "temporal", "title": "Date" },
-        "y": { "field": "hotspots", "type": "quantitative", "stack": "zero", "title": "Hotspots" },
+        "y": { "field": "hotspots", "type": "quantitative", "title": "Hotspot Count", "stack": "zero" },
         "color": {
           "field": "daynight",
           "type": "nominal",
@@ -48,26 +53,30 @@
         ]
       }
     },
-
     {
       "transform": [
-        { "aggregate": [{ "op": "count", "as": "totalDaily" }], "groupby": ["acq_date"] },
+        {
+          "aggregate": [{ "op": "count", "as": "totalDaily" }],
+          "groupby": ["acq_date"]
+        },
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
       ],
-      "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6, 4], "strokeWidth": 2 },
+      "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6,4], "strokeWidth": 2 },
       "encoding": {
         "x": { "field": "acq_date", "type": "temporal" },
         "tooltip": [
           { "field": "acq_date", "type": "temporal", "title": "Peak Day" },
-          { "field": "totalDaily", "type": "quantitative", "title": "Total hotspots" }
+          { "field": "totalDaily", "type": "quantitative", "title": "Total Hotspots" }
         ]
       }
     },
-
     {
       "transform": [
-        { "aggregate": [{ "op": "count", "as": "totalDaily" }], "groupby": ["acq_date"] },
+        {
+          "aggregate": [{ "op": "count", "as": "totalDaily" }],
+          "groupby": ["acq_date"]
+        },
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
       ],
