@@ -1,23 +1,30 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Daily hotspot counts split by Day (D) and Night (N), with annotation for the peak day.",
+  "description": "Daily hotspot counts split by Day (D) and Night (N), with legend selection and a peak-day annotation.",
   "width": 750,
   "height": 320,
   "config": { "background": "#F5F5F5", "view": { "stroke": null } },
-  "data": { "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv" },
+  "data": {
+    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv"
+  },
 
-  "params": [
-    {
-      "name": "dayNightSelect",
-      "select": { "type": "point", "fields": ["daynight"] },
-      "bind": "legend"
-    }
-  ],
+"params": [
+  {
+    "name": "dayNightSelect",
+    "select": {
+      "type": "point",
+      "fields": ["daynight"],
+      "on": "click",
+      "toggle": "true"
+    },
+    "bind": "legend"
+  }
+],
+
 
   "layer": [
     {
       "transform": [
-        { "filter": "isDate(datum.acq_date)" },
         { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["acq_date", "daynight"] }
       ],
       "mark": { "type": "area", "interpolate": "monotone" },
@@ -44,7 +51,6 @@
 
     {
       "transform": [
-        { "filter": "isDate(datum.acq_date)" },
         { "aggregate": [{ "op": "count", "as": "totalDaily" }], "groupby": ["acq_date"] },
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
@@ -52,7 +58,6 @@
       "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6, 4], "strokeWidth": 2 },
       "encoding": {
         "x": { "field": "acq_date", "type": "temporal" },
-        "size": { "value": 2 },
         "tooltip": [
           { "field": "acq_date", "type": "temporal", "title": "Peak Day" },
           { "field": "totalDaily", "type": "quantitative", "title": "Total hotspots" }
@@ -62,7 +67,6 @@
 
     {
       "transform": [
-        { "filter": "isDate(datum.acq_date)" },
         { "aggregate": [{ "op": "count", "as": "totalDaily" }], "groupby": ["acq_date"] },
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
@@ -71,11 +75,7 @@
       "encoding": {
         "x": { "field": "acq_date", "type": "temporal" },
         "y": { "value": 0 },
-        "text": {
-          "field": "totalDaily",
-          "type": "quantitative",
-          "format": "Peak: {,.0f}"
-        }
+        "text": { "field": "totalDaily", "type": "quantitative", "format": "Peak: {,.0f}" }
       }
     }
   ]
