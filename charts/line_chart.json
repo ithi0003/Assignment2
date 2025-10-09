@@ -1,19 +1,20 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Hotspot counts per day, split by Day (D) and Night (N). Robust date parse + legend selection + peak-day annotation.",
+  "description": "Hotspot counts per day split by Day (D) and Night (N).",
   "width": 750,
   "height": 320,
   "config": { "background": "#F5F5F5", "view": { "stroke": null } },
-  "data": {
-    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv"
-  },
+
+  "data": { "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv" },
+
   "params": [
     {
       "name": "dayNightSelect",
-      "select": { "type": "point", "fields": ["daynight_clean"] },
+      "select": { "type": "point", "fields": ["daynight"] },
       "bind": "legend"
     }
   ],
+
   "layer": [
     {
       "transform": [
@@ -23,32 +24,37 @@
           "as": "iso"
         },
         { "calculate": "toDate(datum.iso)", "as": "date" },
-        { "calculate": "lower(replace(datum.daynight, /\\s+/g, ''))", "as": "daynight_clean" },
-        { "filter": "datum.daynight_clean == 'd' || datum.daynight_clean == 'n'" },
-        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date", "daynight_clean"] }
+        { "filter": "datum.daynight == 'D' || datum.daynight == 'N'" },
+        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date", "daynight"] }
       ],
-      "mark": { "type": "area", "interpolate": "monotone" },
+      "mark": { "type": "area", "interpolate": "monotone", "strokeWidth": 1.5 },
       "encoding": {
         "x": { "field": "date", "type": "temporal", "title": "Date" },
         "y": { "field": "hotspots", "type": "quantitative", "title": "Hotspot Count", "stack": "zero" },
         "color": {
-          "field": "daynight_clean",
+          "field": "daynight",
           "type": "nominal",
           "title": "Day/Night",
-          "scale": { "domain": ["d", "n"], "range": ["#ffa726", "#42a5f5"] },
-          "legend": { "title": "Day/Night (click to filter)" }
+          "scale": { "domain": ["D", "N"], "range": ["#ffa726", "#42a5f5"] }
+        },
+        "stroke": {
+          "field": "daynight",
+          "type": "nominal",
+          "scale": { "domain": ["D", "N"], "range": ["#d97f00", "#1e88e5"] },
+          "legend": null
         },
         "opacity": {
           "condition": { "param": "dayNightSelect", "value": 1 },
-          "value": 0.25
+          "value": 0.35
         },
         "tooltip": [
           { "field": "date", "type": "temporal", "title": "Date" },
-          { "field": "daynight_clean", "type": "nominal", "title": "D/N" },
+          { "field": "daynight", "type": "nominal", "title": "Day/Night" },
           { "field": "hotspots", "type": "quantitative", "title": "Hotspots" }
         ]
       }
     },
+
     {
       "transform": [
         { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
@@ -61,7 +67,7 @@
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
       ],
-      "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6, 4], "strokeWidth": 2 },
+      "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6,4], "strokeWidth": 2 },
       "encoding": {
         "x": { "field": "date", "type": "temporal" },
         "tooltip": [
@@ -70,6 +76,7 @@
         ]
       }
     },
+
     {
       "transform": [
         { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
