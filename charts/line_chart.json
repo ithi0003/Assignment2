@@ -75,7 +75,7 @@
     { "aggregate": [{ "op": "sum", "field": "dailyCount", "as": "totalDaily" }], "groupby": ["date"] },
     { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
     { "filter": "datum.r == 1" },
-    { "calculate": "'Peak: ' + format(datum.totalDaily, ',.0f' ) + 'hotspots'", "as": "label" }
+    { "calculate": "'September 10: 1317 hotspots'", "as": "label" }
   ],
   "mark": { "type": "text", "dx": 6, "dy": -8, "fontSize": 12, "fontWeight": "bold", "fill": "#333" },
   "encoding": {
