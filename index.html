@@ -1,94 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Australian Bushfires</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Australian Bushfires</title>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+  <!-- Vega libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
 
-    <!-- Vega / Vega-Lite / Vega-Embed -->
-    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-  </head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Australian Bushfires</h1>
+    <p>A Visual Exploration of Australia's Bushfire Activity</p>
+  </header>
 
-  <body>
-    <header class="hero">
-      <h1>Australian Bushfires</h1>
-      <p class="subtitle">
-        A data-driven exploration of Australia's bushfire activity using NASA FIRMS satellite hotspot data (Aug-Sep 2019).
-        The first visualisation maps hotspots by location and intensity; the second tracks daily hotspot counts, comparing
-        day and night detections to reveal temporal patterns in fire activity.
-      </p>
-    </header>
+  <!-- Main Section -->
+  <section class="main-content">
+    <div class="container-large">
 
-    <!-- Row 1: Map (left) + Text (right) -->
-    <section class="row card">
-      <div class="col chart">
-        <div id="vis-map" class="viz"></div>
+      <!-- Map -->
+      <h1>Hotspot Intensity and Distribution</h1>
+      <div class="sub-container">
+        <div class="map-container" id="map_vis"></div>
+
+        <div class="text-container">
+          <h2>About the Map</h2>
+          <p>
+            This interactive map visualises <strong>satellite-detected fire hotspots</strong> across Australia.
+            Each circle marks a detection, with colour intensity representing <strong>Fire Radiative Power (FRP)</strong>
+            - a measure of fire strength - and size corresponding to the scan width. Geographic boundaries are drawn
+            from TopoJSON data to show ocean, states, and country borders.
+          </p>
+
+          <p><strong>Key Insights:</strong></p>
+          <ul>
+            <li>Fire activity clusters along northern and eastern Australia.</li>
+            <li>Higher FRP values are concentrated in regions with prolonged drought.</li>
+            <li>Interactive tooltips reveal the date, brightness, and energy of each fire.</li>
+          </ul>
+
+          <div class="tooltip">
+            <strong>Hover here for chart features</strong>
+            <div class="tooltip-text">
+              <p><span>FRP Slider:</span> Adjust the threshold to focus on low vs high-intensity fires.</p>
+              <p><span>Interactive Points:</span> Hover to see detailed hotspot attributes.</p>
+              <p><span>Colour Encoding:</span> Shades from yellow -> red represent growing intensity.</p>
+              <p><span>Legend:</span> Guides you through the FRP scale and point size.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col text">
-        <h2>Hotspot Map</h2>
-        <p>
-          Each circle represents a <strong>satellite-detected fire hotspot</strong>. Colour encodes <strong>Fire Radiative Power (FRP)</strong>
-          (energy released), while circle size reflects the sensor <strong>scan</strong> value. The basemap provides geographic context
-          with ocean, country outline, state borders and graticules.
-        </p>
-        <ul>
-          <li><b>Clustering:</b> Dense hotspots along northern and eastern Australia during the sample period.</li>
-          <li><b>Colour scale:</b> Soft yellow -> deep orange indicates higher FRP (more energetic fires).</li>
-          <li><b>Hover:</b> Tooltips show date, brightness, FRP and scan size for each detection.</li>
+
+      <!-- Area Chart -->
+      <h1>Hotspot Counts Over Time</h1>
+      <div class="sub-container">
+        <div class="text-container">
+          <h2>About the Chart</h2>
+          <p>
+            This stacked area chart displays <strong>daily hotspot counts</strong> split by <strong>Day (D)</strong> and <strong>Night (N)</strong>.
+            Use the dropdown below the chart to filter between time periods. A dashed rule and annotation highlight the peak day.
+          </p>
+
+          <p><strong>Key Takeaways:</strong></p>
+          <ul>
+            <li>Daytime detections dominate across the observation period.</li>
+            <li>Short spikes in night-time detections align with peak fire activity days.</li>
+            <li>The peak on September 10 marks the highest recorded activity with 1300+ hotspots.</li>
+          </ul>
+
+          <div class="tooltip">
+            <strong>Hover here for chart features</strong>
+            <div class="tooltip-text">
+              <p><span>Dropdown Filter:</span> Select "All,"" "Day," or "Night" hotspots.</p>
+              <p><span>Tooltips:</span> Hover to display exact counts and dates.</p>
+              <p><span>Annotation:</span> Peak count is marked with a dashed vertical line.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container" id="area_vis"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Flames and Forecasts - Data from NASA FIRMS (via Kaggle)</p>
+    <div class="popup-container">
+      <p class="hover-text">Data Sources</p>
+      <div class="popup-content">
+        <ul class="footer-links">
+          <li>
+            <a href="https://www.kaggle.com/datasets/carlosparadis/fires-from-space-australia-and-new-zeland" target="_blank">
+              Fires from Space: Australia and New Zealand
+            </a> - Satellite hotspot detections used for mapping.
+          </li>
+          <li>
+            <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank">
+              NASA FIRMS
+            </a> - Original MODIS satellite fire data service.
+          </li>
         </ul>
-        <p class="note">Use this view to identify regions with concentrated and intense fire activity.</p>
       </div>
-    </section>
+    </div>
+  </footer>
 
-    <!-- Row 2: Text (left) + Stacked Area (right) -->
-    <section class="row card reverse">
-      <div class="col text">
-        <h2>Hotspot Counts Over Time (Day vs Night)</h2>
-        <p>
-          Daily hotspot counts are stacked by the <strong>Day/Night</strong> flag to show total volume and each period's contribution.
-          A dropdown filter lets you focus on Day or Night only. A dashed rule marks the peak day of activity.
-        </p>
-        <ul>
-          <li><b>Interaction:</b> Dropdown filter (<em>All / Day (D) / Night (N)</em>) and tooltips on hover.</li>
-          <li><b>Annotation:</b> Dashed vertical rule + label highlights the highest daily total.</li>
-          <li><b>Takeaway:</b> Daytime detections dominate overall volume; short Night spikes occur around peak windows.</li>
-        </ul>
-        <p class="note">Patterns line up with hot, dry, windy intervals; counts recede after cooler or wetter periods.</p>
-      </div>
-      <div class="col chart">
-        <div id="vis-line" class="viz"></div>
-      </div>
-    </section>
+  <!-- Vega Embeds -->
+  <script>
+    const mapSpec = "https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json";
+    vegaEmbed('#map_vis', mapSpec, { actions: false }).catch(console.error);
 
-    <footer class="footer">
-      <p>
-        Source: NASA FIRMS (via Kaggle). Visualisations built with Vega-Lite.
-        &nbsp;|&nbsp;
-        <a href="https://ithi0003.github.io/3179/" target="_blank" rel="noopener">Project URL</a>
-      </p>
-    </footer>
-
-    <script>
-      // Map
-      vegaEmbed(
-        '#vis-map',
-        'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json',
-        { actions: false }
-      ).catch(console.error);
-
-      // Stacked Area (Day vs Night)
-      vegaEmbed(
-        '#vis-line',
-        'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/line_chart.json',
-        { actions: false }
-      ).catch(console.error);
-    </script>
-  </body>
+    const areaSpec = "https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/line_chart.json";
+    vegaEmbed('#area_vis', areaSpec, { actions: false }).catch(console.error);
+  </script>
+</body>
 </html>

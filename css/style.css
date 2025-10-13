@@ -1,105 +1,180 @@
-:root{
-  --bg: #f6f6f6;
-  --card: #ffffff;
-  --ink: #1b1f2a;
-  --muted: #6b7280;
-  --accent: #0f172a;
-  --shadow: 0 12px 28px rgba(0,0,0,.06);
-  --radius: 18px;
-  --gap: 28px;
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('https://fonts.cdnfonts.com/s/15109/avantgarde-book-webfont.woff') format('woff');
 }
 
-*{ box-sizing: border-box; }
-html, body{ height: 100%; }
-body{
+body {
+  font-family: 'Avant Garde', sans-serif;
   margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  padding: 0;
+  background-color: #FFE4C4;
+  color: #1d1d1f;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  background-color: #FF6A4D;
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 6rem;
+  margin: 0;
+}
+
+header p {
+  font-size: 1.2rem;
+  margin-top: 5px;
+  font-family: 'Avant Garde', sans-serif;
+}
+
+/* Main Content */
+.main-content {
+  padding: 50px 20px;
+  background-color: #FFDAB5;
+}
+
+.container-large {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #F5F5F5;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.container-large h1 {
+  font-family: 'Avant Garde', sans-serif;
+  font-size: 2.3rem;
+  margin-bottom: 20px;
+  color: #FF6347;
+  text-align: center;
+}
+
+/* Subsections (Chart + Text) */
+.sub-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 50px;
+}
+
+.map-container,
+.chart-container {
+  width: 65%;
+  height: 550px;
+  background-color: #F5F5F5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.text-container {
+  width: 30%;
+  margin-left: 20px;
+  padding: 20px;
+  background-color: #F5F5F5;
+  border-radius: 8px;
+  color: #1d1d1f;
+  font-family: 'Avant Garde', sans-serif;
   line-height: 1.6;
 }
 
-/* ---------- Hero ---------- */
-.hero{
-  max-width: 1200px;
-  margin: 48px auto 20px;
-  padding: 0 22px;
-  text-align: center;
-}
-.hero h1{
-  margin: 0 0 12px;
-  font-family: "Libre Baskerville", Georgia, serif;
-  font-weight: 700;
-  font-size: clamp(34px, 5vw, 58px);
-  letter-spacing: -0.015em;
-}
-.subtitle{
-  margin: 0 auto;
-  max-width: 960px;
-  color: var(--muted);
-  font-size: 1.05rem;
+.text-container h2 {
+  color: #FF6A4D;
+  margin-bottom: 10px;
 }
 
-/* ---------- Rows / Cards ---------- */
-.row{
-  max-width: 1200px;
-  margin: 22px auto;
-  padding: 28px;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;   /* chart slightly larger */
-  gap: var(--gap);
-  align-items: center;
-}
-.row.reverse{
-  grid-template-columns: 0.9fr 1.1fr;   /* text first, chart larger on right */
-}
-.card{
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-/* ---------- Columns ---------- */
-.col{ min-width: 0; }
-.chart .viz{
-  width: 100%;
-  min-height: 380px; /* ensure the container reserves space */
-}
-.text h2{
-  margin: 0 0 10px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  font-size: 1.35rem;
-}
-.text p{ margin: 0 0 10px; }
-.text ul{
-  margin: 10px 0;
+.text-container ul {
   padding-left: 18px;
 }
-.text li{ margin: 6px 0; }
-.note{
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 0.95rem;
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 380px;
+  background-color: #f5f5f5;
+  color: #333;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  margin-left: -190px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-style: italic;
+}
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+.tooltip .tooltip-text span {
+  font-weight: bold;
+  text-decoration: underline;
+  font-style: italic;
 }
 
-/* ---------- Footer ---------- */
-.footer{
-  max-width: 1200px;
-  margin: 18px auto 46px;
-  padding: 0 22px;
-  color: var(--muted);
+/* Footer */
+footer {
   text-align: center;
+  padding: 20px;
+  background-color: #FF6A4D;
+  color: white;
 }
-.footer a{
-  color: var(--ink);
-  text-underline-offset: 3px;
+footer p {
+  margin: 0 0 10px;
+  font-family: 'Avant Garde', sans-serif;
 }
-
-/* ---------- Responsive ---------- */
-@media (max-width: 1020px){
-  .row, .row.reverse{
-    grid-template-columns: 1fr; /* stack on small screens */
-  }
-  .chart .viz{ min-height: 340px; }
+.footer-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-links li {
+  margin-bottom: 10px;
+}
+.footer-links a {
+  color: #FF6A4D;
+  font-weight: bold;
+  text-decoration: none;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+.popup-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.popup-content {
+  display: none;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #F5F5F5;
+  color: #1d1d1f;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  z-index: 1;
+  width: 260px;
+  text-align: left;
+}
+.popup-container:hover .popup-content {
+  display: block;
 }
