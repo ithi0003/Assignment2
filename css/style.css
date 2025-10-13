@@ -78,6 +78,20 @@ header p {
   overflow: hidden;
 }
 
+.map-container { 
+  position: static; 
+  overflow: visible; 
+  display: block;       /* avoid center-flex so the form appears above chart */
+}
+
+.map-container .vega-bindings {
+  position: static;     /* default flow: appears before the chart */
+  margin: 0 0 10px 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
 /* Text containers */
 .text-container {
   width: 30%;
