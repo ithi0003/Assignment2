@@ -5,8 +5,7 @@
     <title>Australian Bushfires</title>
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Merriweather:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link rel="stylesheet" href="style.css" />
@@ -16,76 +15,80 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   </head>
+
   <body>
     <header class="hero">
       <h1>Australian Bushfires</h1>
       <p class="subtitle">
-        A compact look at satellite-detected fire activity across Australia. The map shows where hotspots occur
-        and how intense they are; the time series shows how hotspot counts evolve by day and night.
-        Data source: NASA FIRMS (Kaggle), Aug - Sep 2019 sample used for this dashboard.
+        A data-driven exploration of Australia's bushfire activity using NASA FIRMS satellite hotspot data (Aug-Sep 2019).
+        The first visualisation maps hotspots by location and intensity; the second tracks daily hotspot counts, comparing
+        day and night detections to reveal temporal patterns in fire activity.
       </p>
     </header>
 
-    <!-- Row 1: Map left, text right -->
+    <!-- Row 1: Map (left) + Text (right) -->
     <section class="row card">
-      <div class="col col-chart">
+      <div class="col chart">
         <div id="vis-map" class="viz"></div>
       </div>
-      <div class="col col-text">
+      <div class="col text">
         <h2>Hotspot Map</h2>
         <p>
-          Each circle marks a satellite hotspot detection plotted at its latitude/longitude. Colour encodes
-          <strong>Fire Radiative Power (FRP)</strong> and size reflects the sensor <strong>scan</strong> value.
-          The base map provides geographic context (ocean, country outline, state borders and graticules).
+          Each circle represents a <strong>satellite-detected fire hotspot</strong>. Colour encodes <strong>Fire Radiative Power (FRP)</strong>
+          (energy released), while circle size reflects the sensor <strong>scan</strong> value. The basemap provides geographic context
+          with ocean, country outline, state borders and graticules.
         </p>
-        <ul class="bullets">
-          <li><strong>What you see:</strong> Clusters of hotspots along northern and eastern regions during the sample period.</li>
-          <li><strong>Read the colours:</strong> Darker hues indicate higher FRP (hotter, more energetic fires).</li>
-          <li><strong>Hover anywhere:</strong> Tooltips reveal exact date, FRP, brightness and scan size for that detection.</li>
+        <ul>
+          <li><b>Clustering:</b> Dense hotspots along northern and eastern Australia during the sample period.</li>
+          <li><b>Colour scale:</b> Soft yellow -> deep orange indicates higher FRP (more energetic fires).</li>
+          <li><b>Hover:</b> Tooltips show date, brightness, FRP and scan size for each detection.</li>
         </ul>
-        <p class="note">Tip: Use this view to spot regional concentrations and unusually intense hotspots.</p>
+        <p class="note">Use this view to identify regions with concentrated and intense fire activity.</p>
       </div>
     </section>
 
-    <!-- Row 2: Text left, stacked area right -->
+    <!-- Row 2: Text (left) + Stacked Area (right) -->
     <section class="row card reverse">
-      <div class="col col-text">
+      <div class="col text">
         <h2>Hotspot Counts Over Time (Day vs Night)</h2>
         <p>
-          Daily hotspot counts are stacked by the <strong>Day/Night</strong> flag to show both
-          the total volume and each period's contribution. Use the dropdown to focus on
-          Day only or Night only. A dashed rule marks the peak total day.
+          Daily hotspot counts are stacked by the <strong>Day/Night</strong> flag to show total volume and each period's contribution.
+          A dropdown filter lets you focus on Day or Night only. A dashed rule marks the peak day of activity.
         </p>
-        <ul class="bullets">
-          <li><strong>Interaction:</strong> Dropdown filter (<em>All / D / N</em>) and tooltips on hover.</li>
-          <li><strong>Annotation:</strong> The dashed vertical line identifies the highest daily total; label shows the count.</li>
-          <li><strong>Key takeaway:</strong> Daytime detections dominate overall volume, while short Night spikes still occur near peak activity windows.</li>
+        <ul>
+          <li><b>Interaction:</b> Dropdown filter (<em>All / Day (D) / Night (N)</em>) and tooltips on hover.</li>
+          <li><b>Annotation:</b> Dashed vertical rule + label highlights the highest daily total.</li>
+          <li><b>Takeaway:</b> Daytime detections dominate overall volume; short Night spikes occur around peak windows.</li>
         </ul>
-        <p class="note">Insight: Peaks align with dry, windy periods; counts recede after cooler or wetter intervals.</p>
+        <p class="note">Patterns line up with hot, dry, windy intervals; counts recede after cooler or wetter periods.</p>
       </div>
-      <div class="col col-chart">
+      <div class="col chart">
         <div id="vis-line" class="viz"></div>
       </div>
     </section>
 
     <footer class="footer">
-      <div>
-        <span>Source:</span> NASA FIRMS (via Kaggle). Visualisations built with Vega-Lite.
-        <br/>
+      <p>
+        Source: NASA FIRMS (via Kaggle). Visualisations built with Vega-Lite.
+        &nbsp;|&nbsp;
         <a href="https://ithi0003.github.io/3179/" target="_blank" rel="noopener">Project URL</a>
-      </div>
+      </p>
     </footer>
 
     <script>
       // Map
-      vegaEmbed('#vis-map', 'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json', {
-        actions: false
-      }).catch(console.error);
+      vegaEmbed(
+        '#vis-map',
+        'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json',
+        { actions: false }
+      ).catch(console.error);
 
       // Stacked Area (Day vs Night)
-      vegaEmbed('#vis-line', 'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/line_chart.json', {
-        actions: false
-      }).catch(console.error);
+      vegaEmbed(
+        '#vis-line',
+        'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/line_chart.json',
+        { actions: false }
+      ).catch(console.error);
     </script>
   </body>
 </html>
