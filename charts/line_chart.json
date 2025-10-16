@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Hotspot counts per day split by Day (D) and Night (N). Dropdown filter + annotation.",
+  "description": "Hotspot counts per day split by Day and Night. Dropdown filter + annotation.",
   "width": 750,
   "height": 320,
   "config": { "background": "#F5F5F5", "view": { "stroke": null } },
@@ -11,7 +11,7 @@
     {
       "name": "dnFilter",
       "value": "All",
-      "bind": { "input": "select", "options": ["All","D","N"], "name": "Select: " }
+      "bind": { "input": "select", "options": ["All","Day","Night"], "name": "Select: " }
     }
   ],
 
@@ -36,11 +36,11 @@
           "field": "daynight",
           "type": "nominal",
           "title": "Day/Night",
-          "scale": { "domain": ["D","N"], "range": ["#fadb44","#2a3444"] }
+          "scale": { "domain": ["Day","Night"], "range": ["#fadb44","#2a3444"] }
         },
         "tooltip": [
           { "field": "date", "type": "temporal", "title": "Date" },
-          { "field": "daynight", "type": "nominal", "title": "D/N" },
+          { "field": "daynight", "type": "nominal", "title": "Time of Day" },
           { "field": "hotspots", "type": "quantitative", "title": "Hotspots" }
         ]
       }
