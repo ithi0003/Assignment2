@@ -1,0 +1,55 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Monthly bushfire risk by state as a heatmap.",
+  "width": 650,
+  "height": 430,
+  "data": {
+    "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_risk.csv"
+  },
+  "transform": [
+    { "calculate": "datum['Fire_Risk_Normalized']", "as": "Fire_Risk" }
+  ],
+  "mark": {
+    "type": "rect",
+    "tooltip": true,
+    "stroke": "#FFFFFF",
+    "strokeWidth": 0.5
+  },
+  "encoding": {
+    "x": {
+      "field": "Month",
+      "type": "nominal",
+      "sort": ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+      "axis": { "labelAngle": 0, "title": "Month", "grid": false }
+    },
+    "y": {
+      "field": "Location",
+      "type": "nominal",
+      "sort": "ascending",
+      "axis": { "title": "State / Territory", "grid": false }
+    },
+    "color": {
+      "field": "Fire_Risk",
+      "type": "quantitative",
+      "title": "Fire Risk Level",
+      "scale": {
+        "domain": [0, 0.2, 0.4, 0.6, 0.8, 1],
+        "range": ["#d2f8ff","#9ee7ff","#62cfff","#2b9cff","#005eb8","#002d72"]
+      }
+    },
+    "tooltip": [
+      { "field": "Location", "title": "State" },
+      { "field": "Month", "title": "Month" },
+      { "field": "Fire_Risk", "title": "Fire Risk", "format": ".2f" }
+    ]
+  },
+  "config": {
+    "background": "#F7FAFC",
+    "axis": {
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "labelColor": "#1A202C",
+      "titleColor": "#2A4365"
+    }
+  }
+}

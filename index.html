@@ -90,6 +90,40 @@
     </div>
   </section>
 
+  <!-- Heatmap -->
+<h1>Fire Risk by Month and State</h1>
+<div class="sub-container">
+  <!-- Chart on the left -->
+  <div class="chart-container" id="heatmap_vis"></div>
+
+  <!-- Text on the right -->
+  <div class="text-container">
+    <h2>About the Heatmap</h2>
+    <p>
+      This heatmap visualises the <strong>fire risk intensity</strong> across Australian states throughout the year.
+      Each coloured cell represents the relative <strong>fire danger level</strong> for that month and region,
+      normalised between 0 (low) and 1 (high).
+    </p>
+
+    <p><strong>Key Insights:</strong></p>
+    <ul>
+      <li>Fire risk peaks during <strong>summer months</strong> (Dec-Feb), particularly in northern states.</li>
+      <li>Southern regions like Tasmania show minimal fire danger through winter.</li>
+      <li>The Northern Territory and Queensland display prolonged risk periods due to dry conditions.</li>
+    </ul>
+
+    <div class="tooltip">
+      <strong>Hover here for chart elements</strong>
+      <div class="tooltip-text">
+        <p><span>Colour Gradient:</span> Darker blue = higher fire risk.</p>
+        <p><span>Interactive Tooltips:</span> Hover over a cell to see exact fire risk values.</p>
+        <p><span>Month Sorting:</span> Months are arranged in chronological order from Jan to Dec.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <!-- Footer -->
   <footer>
     <p>&copy; 2025 Australian Bushfires - Data from NASA FIRMS (via Kaggle)</p>
@@ -117,8 +151,12 @@
     const mapSpec = "https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json";
     vegaEmbed('#map_vis', mapSpec, { actions: false }).catch(console.error);
 
-    const areaSpec = "https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/line_chart.json";
+    const areaSpec = "https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json";
     vegaEmbed('#area_vis', areaSpec, { actions: false }).catch(console.error);
+
+    const heatmapSpec = "https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/heatmap.json";
+    vegaEmbed('#heatmap_vis', heatmapSpec, { actions: false }).catch(console.error);
+
   </script>
 </body>
 </html>
