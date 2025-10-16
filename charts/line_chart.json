@@ -20,7 +20,7 @@
       "transform": [
         { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1]) < 2 ? '0' + datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0]) < 2 ? '0' + datum.parts[0] : datum.parts[0]))",
           "as": "iso"
         },
         { "calculate": "toDate(datum.iso)", "as": "date" },
@@ -30,17 +30,33 @@
         },
         { "filter": "datum.daynightLabel != null" },
         { "filter": "dnFilter == 'All' || datum.daynightLabel == dnFilter" },
-        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date","daynightLabel"] }
+        {
+          "aggregate": [
+            { "op": "count", "as": "hotspots" }
+          ],
+          "groupby": ["date", "daynightLabel"]
+        }
       ],
       "mark": { "type": "area", "interpolate": "linear", "strokeWidth": 1.5 },
       "encoding": {
-        "x": { "field": "date", "type": "temporal", "title": "Date", "axis": { "grid": false } },
-        "y": { "field": "hotspots", "type": "quantitative", "title": "Hotspot Count", "stack": "zero", "axis": { "grid": false } },
+        "x": {
+          "field": "date",
+          "type": "temporal",
+          "title": "Date",
+          "axis": { "grid": false }
+        },
+        "y": {
+          "field": "hotspots",
+          "type": "quantitative",
+          "title": "Hotspot Count",
+          "stack": "zero",
+          "axis": { "grid": false }
+        },
         "color": {
           "field": "daynightLabel",
           "type": "nominal",
           "title": "Time of Day",
-          "scale": { "domain": ["Day","Night"], "range": ["#fadb44","#2a3444"] }
+          "scale": { "domain": ["Day", "Night"], "range": ["#fadb44", "#2a3444"] }
         },
         "tooltip": [
           { "field": "date", "type": "temporal", "title": "Date" },
@@ -54,7 +70,7 @@
       "transform": [
         { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1]) < 2 ? '0' + datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0]) < 2 ? '0' + datum.parts[0] : datum.parts[0]))",
           "as": "iso"
         },
         { "calculate": "toDate(datum.iso)", "as": "date" },
@@ -63,7 +79,7 @@
         { "window": [{ "op": "rank", "as": "r" }], "sort": [{ "field": "totalDaily", "order": "descending" }] },
         { "filter": "datum.r == 1" }
       ],
-      "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6,4], "strokeWidth": 1 },
+      "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6, 4], "strokeWidth": 1 },
       "encoding": { "x": { "field": "date", "type": "temporal" } }
     },
 
@@ -71,7 +87,7 @@
       "transform": [
         { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1]) < 2 ? '0' + datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0]) < 2 ? '0' + datum.parts[0] : datum.parts[0]))",
           "as": "iso"
         },
         { "calculate": "toDate(datum.iso)", "as": "date" },
