@@ -31,7 +31,7 @@
     "color": {
       "field": "Fire_Risk",
       "type": "quantitative",
-      "title": "Fire Risk Level",
+      "title": "Fire Risk",
       "scale": {
         "domain": [0, 0.2, 0.4, 0.6, 0.8, 1],
         "range": ["#d2f8ff","#9ee7ff","#62cfff","#2b9cff","#005eb8","#002d72"]
