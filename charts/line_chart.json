@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Hotspot counts per day split by Day and Night with conditional annotations.",
+  "description": "Hotspot counts per day split by Day and Night. Dropdown filter + conditional annotations.",
   "width": 750,
   "height": 320,
   "config": { "background": "#F5F5F5", "view": { "stroke": null } },
@@ -11,20 +11,17 @@
     {
       "name": "dnFilter",
       "value": "All",
-      "bind": {
-        "input": "select",
-        "options": ["All", "Day", "Night"],
-        "name": "Select: "
-      }
+      "bind": { "input": "select", "options": ["All","Day","Night"], "name": "Select: " }
     }
   ],
 
   "layer": [
+
     {
       "transform": [
         { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2?'0'+datum.parts[1]:datum.parts[1]) + '-' + (length(datum.parts[0])<2?'0'+datum.parts[0]:datum.parts[0]))",
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
           "as": "iso"
         },
         { "calculate": "toDate(datum.iso)", "as": "date" },
@@ -34,20 +31,23 @@
         },
         { "filter": "datum.daynightLabel != null" },
         { "filter": "dnFilter=='All' || datum.daynightLabel==dnFilter" },
-        {
-          "aggregate": [{ "op": "count", "as": "hotspots" }],
-          "groupby": ["date", "daynightLabel"]
-        }
+        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date","daynightLabel"] }
       ],
       "mark": { "type": "area", "interpolate": "linear", "strokeWidth": 1.5 },
       "encoding": {
         "x": { "field": "date", "type": "temporal", "title": "Date", "axis": { "grid": false } },
-        "y": { "field": "hotspots", "type": "quantitative", "title": "Hotspot Count", "stack": "zero", "axis": { "grid": false } },
+        "y": {
+          "field": "hotspots",
+          "type": "quantitative",
+          "title": "Hotspot Count",
+          "stack": "zero",
+          "axis": { "grid": false, "format": "," }
+        },
         "color": {
           "field": "daynightLabel",
           "type": "nominal",
           "title": "Time of Day",
-          "scale": { "domain": ["Day", "Night"], "range": ["#fadb44", "#2a3444"] }
+          "scale": { "domain": ["Day","Night"], "range": ["#fadb44","#2a3444"] }
         },
         "tooltip": [
           { "field": "date", "type": "temporal", "title": "Date" },
@@ -60,9 +60,12 @@
 
     {
       "transform": [
+        { "filter": "dnFilter=='All'" },  
+
+
         { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
         {
-          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2?'0'+datum.parts[1]:datum.parts[1]) + '-' + (length(datum.parts[0])<2?'0'+datum.parts[0]:datum.parts[0]))",
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
           "as": "iso"
         },
         { "calculate": "toDate(datum.iso)", "as": "date" },
@@ -71,33 +74,76 @@
           "as": "daynightLabel"
         },
         { "filter": "datum.daynightLabel != null" },
-     
-        { "filter": "dnFilter=='All' || datum.daynightLabel==dnFilter" },
-        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date", "daynightLabel"] },
 
-        {
-          "window": [{ "op": "rank", "as": "rank" }],
-          "sort": [{ "field": "hotspots", "order": "descending" }]
-        },
-        { "filter": "rank == 1" },
-        {
-          "calculate": "datum.daynightLabel == 'Day' ? 'September 10: 1,008 hotspots' : datum.daynightLabel == 'Night' ? 'September 6: 525 hotspots' : 'September 10: 1,317 hotspots'",
-          "as": "label"
-        }
+
+        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date","daynightLabel"] },
+        { "aggregate": [{ "op": "sum", "field": "hotspots", "as": "total" }], "groupby": ["date"] },
+
+
+        { "window": [{ "op": "rank", "as": "rk" }], "sort": [{ "field": "total", "order": "descending" }] },
+        { "filter": "datum.rk==1" },
+
+
+        { "calculate": "timeFormat(datum.date, '%B %-d') + ': ' + format(datum.total, ',') + ' hotspots'", "as": "label" }
       ],
-      "mark": {
-        "type": "text",
-        "dx": 6,
-        "dy": -8,
-        "fontSize": 12,
-        "fontWeight": "bold",
-        "fill": "#333"
-      },
-      "encoding": {
-        "x": { "field": "date", "type": "temporal" },
-        "y": { "field": "hotspots", "type": "quantitative" },
-        "text": { "field": "label" }
-      }
+      "layer": [
+        {
+          "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6,4], "strokeWidth": 1 },
+          "encoding": { "x": { "field": "date", "type": "temporal" } }
+        },
+        {
+          "mark": { "type": "text", "dx": 6, "dy": -8, "fontSize": 12, "fontWeight": "bold", "fill": "#333" },
+          "encoding": {
+            "x": { "field": "date", "type": "temporal" },
+            "y": { "field": "total", "type": "quantitative" },
+            "text": { "field": "label" }
+          }
+        }
+      ]
+    },
+
+
+    {
+      "transform": [
+        { "filter": "dnFilter!='All'" },  
+
+  
+        { "calculate": "split(datum.acq_date,'/')", "as": "parts" },
+        {
+          "calculate": "(toNumber(datum.parts[2]) + '-' + (length(datum.parts[1])<2 ? '0'+datum.parts[1] : datum.parts[1]) + '-' + (length(datum.parts[0])<2 ? '0'+datum.parts[0] : datum.parts[0]))",
+          "as": "iso"
+        },
+        { "calculate": "toDate(datum.iso)", "as": "date" },
+        {
+          "calculate": "datum.daynight=='D' ? 'Day' : datum.daynight=='N' ? 'Night' : null",
+          "as": "daynightLabel"
+        },
+        { "filter": "datum.daynightLabel != null && datum.daynightLabel==dnFilter" },
+
+
+        { "aggregate": [{ "op": "count", "as": "hotspots" }], "groupby": ["date"] },
+
+
+        { "window": [{ "op": "rank", "as": "rk" }], "sort": [{ "field": "hotspots", "order": "descending" }] },
+        { "filter": "datum.rk==1" },
+
+
+        { "calculate": "timeFormat(datum.date, '%B %-d') + ': ' + format(datum.hotspots, ',') + ' hotspots'", "as": "label" }
+      ],
+      "layer": [
+        {
+          "mark": { "type": "rule", "stroke": "#333", "strokeDash": [6,4], "strokeWidth": 1 },
+          "encoding": { "x": { "field": "date", "type": "temporal" } }
+        },
+        {
+          "mark": { "type": "text", "dx": 6, "dy": -8, "fontSize": 12, "fontWeight": "bold", "fill": "#333" },
+          "encoding": {
+            "x": { "field": "date", "type": "temporal" },
+            "y": { "field": "hotspots", "type": "quantitative" },
+            "text": { "field": "label" }
+          }
+        }
+      ]
     }
   ]
 }
