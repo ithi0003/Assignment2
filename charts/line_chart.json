@@ -36,7 +36,7 @@
           "field": "daynight",
           "type": "nominal",
           "title": "Day/Night",
-          "scale": { "domain": ["Day","Night"], "range": ["#fadb44","#2a3444"] }
+          "scale": { "domain": ["D","N"], "range": ["#fadb44","#2a3444"] }
         },
         "tooltip": [
           { "field": "date", "type": "temporal", "title": "Date" },
