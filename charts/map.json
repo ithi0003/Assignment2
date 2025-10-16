@@ -78,7 +78,7 @@
         },
         "tooltip": [
           { "field": "acq_date", "type": "nominal", "title": "Date" },
-          { "field": "frpNum", "type": "quantitative", "title": "FRP (MW)" },
+          { "field": "frpNum", "type": "quantitative", "title": "FRP (MW)", "format": ","},
           { "field": "scanNum", "type": "quantitative", "title": "Scan Size" },
           { "field": "brightness", "type": "quantitative", "title": "Brightness" },
           { "field": "confidence", "type": "quantitative", "title": "Confidence" }
