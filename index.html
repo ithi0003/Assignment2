@@ -11,7 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
   <!-- Stylesheet (bump v= when you update CSS) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/css/style.css?v=fix-cutoff-02">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@f710b46d39c437cbdfde15318e6938c7887dbc45/css/style.css">
 </head>
 
 <body>
@@ -143,23 +143,21 @@
     </div>
   </footer>
 
-  <!-- Embeds (add ?v= when updating specs to avoid cache) -->
   <script>
     vegaEmbed('#map_vis',
-      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json?v=2025-10-17-1859',
+      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@c0a7fcde5a2d1f49293a60018524fa84f5a23a57/charts/map.json',
       { actions:false }).catch(console.error);
 
     vegaEmbed('#area_vis',
-      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json?v=2025-10-17-1859',
+      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@037f89b6c8832969b68fd69126995f23b72267af/charts/area_chart.json',
       { actions:false }).catch(console.error);
 
     vegaEmbed('#heatmap_vis',
-      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/heatmap.json?v=2025-10-17-1859',
+      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@866bb083a681a2b614b9d4e5f029125014e380d8/charts/heatmap.json',
       { actions:false }).catch(console.error);
 
-    /* Last chart uses raw+version so the tenure dropdown and latest changes always load */
     vegaEmbed('#bar_vis',
-      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/barchart.json?v=2025-10-17-1859',
+      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@11eb8dbfd7e6691c62e2658d926a855c3cb36d5f/charts/barchart.json',
       { actions:false }).catch(console.error);
   </script>
 </body>
