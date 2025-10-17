@@ -1,15 +1,34 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Stacked bar chart: total vs burnt forest area by state",
+  "description": "Stacked bar chart: total vs burnt forest area by state with tenure filter and thousand separators.",
   "data": {
     "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/table3.csv"
   },
+  "params": [
+    {
+      "name": "tenure",
+      "value": "Total native forest",
+      "bind": {
+        "input": "select",
+        "name": "Forest tenure: ",
+        "options": [
+          "Total native forest",
+          "Leasehold forest",
+          "Multiple-use public forest",
+          "Nature conservation reserve",
+          "Other Crown land",
+          "Private forest",
+          "Unresolved tenure"
+        ]
+      }
+    }
+  ],
   "transform": [
-    {"filter": "datum['Forest tenure'] == 'Total native forest'"},
-    {"fold": ["ACT","NSW","NT","Qld","SA","Tas","Vic","WA"], "as": ["State","Total"]},
-    {"calculate": "toNumber(datum['Burnt' + datum.State])", "as": "Burnt"},
-    {"calculate": "max(toNumber(datum.Total) - toNumber(datum.Burnt), 0)", "as": "Unburnt"},
-    {"fold": ["Unburnt","Burnt"], "as": ["Part","Area"]},
+    { "filter": "datum['Forest tenure'] == tenure" },
+    { "fold": ["ACT","NSW","NT","Qld","SA","Tas","Vic","WA"], "as": ["State","Total"] },
+    { "calculate": "toNumber(datum['Burnt' + datum.State])", "as": "Burnt" },
+    { "calculate": "max(toNumber(datum.Total) - toNumber(datum.Burnt), 0)", "as": "Unburnt" },
+    { "fold": ["Unburnt", "Burnt"], "as": ["Part", "Area"] },
     {
       "calculate": "({'ACT':'ACT','NSW':'NSW','NT':'NT','Qld':'QLD','SA':'SA','Tas':'TAS','Vic':'VIC','WA':'WA'})[datum.State]",
       "as": "StateShort"
@@ -17,9 +36,9 @@
   ],
   "width": 700,
   "height": 500,
-  "mark": {"type": "bar"},
+  "mark": { "type": "bar" },
   "encoding": {
-    "y": {"field": "StateShort", "type": "ordinal", "title": "State"},
+    "y": { "field": "StateShort", "type": "ordinal", "title": "State" },
     "x": {
       "field": "Area",
       "type": "quantitative",
@@ -28,20 +47,22 @@
     "color": {
       "field": "Part",
       "type": "nominal",
-      "scale": {"domain": ["Unburnt", "Burnt"], "range": ["#A8DADC", "#E76F51"]},
+      "scale": { "domain": ["Unburnt", "Burnt"], "range": ["#A8DADC", "#E76F51"] },
       "title": "Area Type",
-      "legend": {"orient": "top", "direction": "horizontal"}
+      "legend": { "orient": "top", "direction": "horizontal" }
     },
     "tooltip": [
-      {"field": "StateShort", "title": "State"},
-      {"field": "Total", "title": "Total forest (k ha)"},
-      {"field": "Burnt", "title": "Burnt (k ha)"},
-      {"field": "Unburnt", "title": "Unburnt (k ha)"}
+      { "field": "StateShort", "title": "State" },
+      { "field": "Total", "title": "Total forest (k ha)", "format": "," },
+      { "field": "Burnt", "title": "Burnt (k ha)", "format": "," },
+      { "field": "Unburnt", "title": "Unburnt (k ha)", "format": "," },
+      { "field": "Part", "title": "Type" },
+      { "field": "Area", "title": "Segment (k ha)", "format": "," }
     ]
   },
   "config": {
-    "bar": {"size": 30},
-    "axis": {"labelFont": "Open Sans", "titleFont": "Poppins"},
-    "legend": {"labelFont": "Open Sans", "titleFont": "Poppins"}
+    "bar": { "size": 30 },
+    "axis": { "labelFont": "Open Sans", "titleFont": "Poppins" },
+    "legend": { "labelFont": "Open Sans", "titleFont": "Poppins" }
   }
 }
