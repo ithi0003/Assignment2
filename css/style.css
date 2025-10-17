@@ -9,9 +9,9 @@
   --card: #FFFFFF;
   --ink: #1A202C;
   --ink-muted: #2D3748;
-  --brand-1: #1D3557;
-  --brand-2: #457B9D;
-  --accent:  #A8DADC;
+  --brand-1: #1D3557;   /* deep blue */
+  --brand-2: #457B9D;   /* teal-blue */
+  --accent:  #A8DADC;   /* light teal */
   --shadow: 0 4px 10px rgba(0,0,0,0.1);
   --radius: 12px;
 }
@@ -77,60 +77,36 @@ header p{
    =============================== */
 .sub-container{
   display: flex;
-  align-items: stretch;           /* let cards fill full height of row */
+  align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 32px;
+  margin-bottom: 32px;           /* compact row spacing */
 }
 
 /* ===============================
    Chart / Map cards
    =============================== */
-/* Key fix: use block layout (not flex) so Vega can size itself vertically.
-   Also clip at the border-radius to stop any bleed.  */
 .map-container,
 .chart-container{
   width: 65%;
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  display: block;                 /* prevent vertical centering -> no extra white space */
-  overflow: clip;                 /* hard clip (includes border-radius) */
-  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;              /* contain canvases & remove bleed */
+  padding: 0;                    /* no internal padding -> no extra white space */
+  height: auto;                  /* let Vega size itself */
 }
 
-/* Map: allow natural height from the spec but keep a safe minimum */
+/* Map: keep slider visible but prevent overlap with next title */
 .map-container{
   position: relative;
-  min-height: 620px;              /* matches your map spec =619px */
+  min-height: 620px;             /* map.json =619px; keeps card height tight */
 }
 
-/* Make all Vega roots truly responsive inside cards */
-.map-container .vega-embed,
-.chart-container .vega-embed{
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-
-/* Ensure inner drawing surfaces never overflow the card */
-.map-container svg,
-.map-container canvas,
-.chart-container svg,
-.chart-container canvas{
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-
-/* Remove any default paddings/margins Vega-Embed might inject */
-.vega-embed, .vega-embed *{
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.vega-embed .vega-actions{ display: none !important; }
-
-/* Bindings */
+/* Place the FRP slider neatly inside the map card */
 .map-container .vega-bindings{
   position: absolute;
   top: 10px;
@@ -147,9 +123,18 @@ header p{
   color: var(--ink);
 }
 
-/* Area chart bindings: tuck up to the plot to avoid bottom gap */
+/* Area chart: remove white gap below by compressing the bindings */
 .chart-container .vega-bindings{
-  margin: 8px 12px 0 12px;       /* no negative margins; keeps layout tight */
+  margin: 6px 0 -10px 0;         /* pulls dropdown closer, removes bottom gap */
+}
+
+/* Make Vega canvases flush with the card (no internal margins) */
+.vega-embed, .vega-embed *{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.vega-embed, .vega-view, .vega-svg, canvas, svg{
+  height: auto !important;
 }
 
 /* ===============================
@@ -235,11 +220,6 @@ footer a:hover{ text-decoration: underline; }
     width: 100%;
     min-height: auto;
   }
-  .map-container .vega-bindings{
-    position: static;
-    background: transparent;
-    border: 0;
-    padding: 0;
-  }
-  .chart-container .vega-bindings{ margin: 6px 0 0 0; }
+  .map-container .vega-bindings{ position: static; background: transparent; border: 0; padding: 0; }
+  .chart-container .vega-bindings{ margin: 6px 0 -8px 0; }
 }
