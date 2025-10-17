@@ -10,8 +10,8 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-  <!-- Stylesheet (bump v= when you update CSS) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@21a90be20e18a9ca8aa8b47f2c5c3def92817d44/css/style.css">
+  <!-- Stylesheet (update ?v= when changed) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/css/style.css?v=tooltips-final">
 </head>
 
 <body>
@@ -21,11 +21,11 @@
     <p>A Visual Exploration of Australia's Bushfire Activity</p>
   </header>
 
-  <!-- Main -->
+  <!-- Main Content -->
   <section class="main-content">
     <div class="container-large">
 
-      <!-- ========== Map ========== -->
+      <!-- ===================== Map ===================== -->
       <h1>Hotspot Intensity and Distribution</h1>
       <div class="sub-container">
         <div class="map-container" id="map_vis"></div>
@@ -33,7 +33,7 @@
           <h2>About the Map</h2>
           <p>
             This interactive map visualises <strong>satellite-detected fire hotspots</strong> across Australia.
-            Colour encodes <strong>Fire Radiative Power (FRP)</strong>; size corresponds to scan width.
+            Colour encodes <strong>Fire Radiative Power (FRP)</strong> and size corresponds to scan width.
           </p>
           <ul>
             <li>Clusters appear along northern and eastern regions.</li>
@@ -50,7 +50,7 @@
         </div>
       </div>
 
-      <!-- ========== Stacked Area (Day vs Night) ========== -->
+      <!-- ===================== Area Chart ===================== -->
       <h1>Hotspot Counts Over Time</h1>
       <div class="sub-container">
         <div class="text-container">
@@ -60,9 +60,9 @@
             Dropdown filters period; dashed line marks peak.
           </p>
           <ul>
-            <li>Day dominates through most of the season.</li>
+            <li>Day detections dominate most of the season.</li>
             <li>Night spikes align with major events.</li>
-            <li>Peak day annotated.</li>
+            <li>Peak day highlighted.</li>
           </ul>
           <div class="tooltip">
             <strong>Hover here for chart elements</strong>
@@ -75,18 +75,18 @@
         <div class="chart-container" id="area_vis"></div>
       </div>
 
-      <!-- ========== Heatmap (Risk by Month/State) ========== -->
+      <!-- ===================== Heatmap ===================== -->
       <h1>Fire Risk by Month and State</h1>
       <div class="sub-container">
         <div class="chart-container" id="heatmap_vis"></div>
         <div class="text-container">
           <h2>About the Heatmap</h2>
           <p>
-            Relative <strong>fire risk intensity</strong> by state and month (0 = low, 1 = high).
+            Shows relative <strong>fire risk intensity</strong> by state and month (0 = low, 1 = high).
           </p>
           <ul>
             <li>Risk peaks in summer (Dec-Feb).</li>
-            <li>Southern states generally cooler.</li>
+            <li>Southern states stay cooler.</li>
             <li>NT &amp; QLD show long dry seasons.</li>
           </ul>
           <div class="tooltip">
@@ -99,26 +99,26 @@
         </div>
       </div>
 
-      <!-- ========== Stacked Bars (Total vs Burnt) ========== -->
+      <!-- ===================== Bar Chart ===================== -->
       <h1>Forest Area vs Burnt Area</h1>
       <div class="sub-container">
         <div class="text-container">
           <h2>About the Chart</h2>
           <p>
             Each bar shows a state's <strong>total native forest area</strong> with the
-            <strong>burnt portion</strong> stacked inside it. Use the dropdown to switch
-            <em>forest tenure</em>.
+            <strong>burnt portion</strong> stacked inside it.
+            Use the dropdown to switch <em>forest tenure</em>.
           </p>
           <ul>
-            <li>NSW &amp; VIC had the largest absolute losses.</li>
-            <li>WA &amp; QLD have low burnt percentages relative to size.</li>
-            <li>ACT has the highest proportion burnt relative to area.</li>
-            <li>Nationally, ~6% of native forests were affected.</li>
+            <li>NSW &amp; VIC had the largest forest losses.</li>
+            <li>WA &amp; QLD had low burnt proportions relative to total area.</li>
+            <li>ACT had the highest proportion burnt relative to size.</li>
+            <li>Nationally, about <strong>6% of native forests</strong> were affected.</li>
           </ul>
           <div class="tooltip">
             <strong>Hover here for chart elements</strong>
             <div class="tooltip-text">
-              <p><span>Dropdown:</span> Select forest tenure.</p>
+              <p><span>Dropdown:</span> Select forest tenure type.</p>
               <p><span>Legend:</span> Teal = unburnt, Red = burnt.</p>
             </div>
           </div>
@@ -129,36 +129,47 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ===================== Footer ===================== -->
   <footer>
     <p>2025 Australian Bushfires</p>
     <div class="popup-container">
       <p class="hover-text">Data Sources</p>
       <div class="popup-content">
         <ul class="footer-links">
-          <li><a href="https://www.kaggle.com/datasets/carlosparadis/fires-from-space-australia-and-new-zeland" target="_blank">Fires from Space: Australia and New Zealand</a></li>
-          <li><a href="https://www.kaggle.com/datasets/kkhandekar/australian-forest-fire-area-20192020/data" target="_blank">Australian Forest Fire Area 2019-2020</a></li>
+          <li>
+            <a href="https://www.kaggle.com/datasets/carlosparadis/fires-from-space-australia-and-new-zeland" target="_blank">
+              Fires from Space: Australia and New Zealand
+            </a>
+          </li>
+          <li>
+            <a href="https://www.kaggle.com/datasets/kkhandekar/australian-forest-fire-area-20192020/data" target="_blank">
+              Australian Forest Fire Area 2019-2020
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </footer>
 
+  <!-- ===================== Vega Embeds ===================== -->
   <script>
+    const opts = { actions: false, tooltip: { offsetX: 8, offsetY: 8 } };
+
     vegaEmbed('#map_vis',
-      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@c0a7fcde5a2d1f49293a60018524fa84f5a23a57/charts/map.json',
-      { actions:false }).catch(console.error);
+      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json?v=tooltips-final',
+      opts).catch(console.error);
 
     vegaEmbed('#area_vis',
-      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@037f89b6c8832969b68fd69126995f23b72267af/charts/area_chart.json',
-      { actions:false }).catch(console.error);
+      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json?v=tooltips-final',
+      opts).catch(console.error);
 
     vegaEmbed('#heatmap_vis',
-      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@866bb083a681a2b614b9d4e5f029125014e380d8/charts/heatmap.json',
-      { actions:false }).catch(console.error);
+      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/heatmap.json?v=tooltips-final',
+      opts).catch(console.error);
 
     vegaEmbed('#bar_vis',
-      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@11eb8dbfd7e6691c62e2658d926a855c3cb36d5f/charts/barchart.json',
-      { actions:false }).catch(console.error);
+      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/barchart.json?v=tooltips-final',
+      opts).catch(console.error);
   </script>
 </body>
 </html>
