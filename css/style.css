@@ -186,6 +186,17 @@ header p{
 .tooltip:hover .tooltip-text{ visibility: visible; }
 .tooltip .tooltip-text span{ font-weight: 700; text-decoration: underline; font-style: italic; }
 
+/* Allow tooltips to extend outside charts (maps stay clipped) */
+.chart-container { overflow: visible; }
+.map-container  { overflow: hidden;  }
+
+.vega-tooltip{
+  position: absolute !important;   /* was fixed */
+  z-index: 9999 !important;
+  pointer-events: none;
+}
+
+
 /* ===============================
    Footer
    =============================== */
