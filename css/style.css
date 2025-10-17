@@ -18,7 +18,7 @@
 
 * { box-sizing: border-box; }
 
-html, body {
+html, body{
   margin: 0;
   padding: 0;
   color: var(--ink);
@@ -50,7 +50,7 @@ header p{
 }
 
 /* ===============================
-   Main container
+   Main containers
    =============================== */
 .main-content{
   background: var(--bg-section);
@@ -77,7 +77,7 @@ header p{
    =============================== */
 .sub-container{
   display: flex;
-  align-items: stretch;           /* let cards fill full height of row */
+  align-items: stretch;                 /* cards fill row height */
   justify-content: space-between;
   gap: 24px;
   margin-bottom: 32px;
@@ -86,50 +86,38 @@ header p{
 /* ===============================
    Chart / Map cards
    =============================== */
-/* Key fix: use block layout (not flex) so Vega can size itself vertically.
-   Also clip at the border-radius to stop any bleed.  */
 .map-container,
 .chart-container{
   width: 65%;
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  display: block;                 /* prevent vertical centering -> no extra white space */
-  overflow: clip;                 /* hard clip (includes border-radius) */
-  padding: 0;
+  display: block;
+  padding: 12px 14px;                   /* inner cushion so axes/legends aren't clipped */
 }
 
-/* Map: allow natural height from the spec but keep a safe minimum */
-.map-container{
-  position: relative;
-  min-height: 620px;              /* matches your map spec 619px */
-}
+/* Tooltips must be allowed to overflow charts (maps stay clipped) */
+.chart-container{ overflow: visible; }
+.map-container{ position: relative; overflow: hidden; min-height: 620px; }
 
-/* Make all Vega roots truly responsive inside cards */
-.map-container .vega-embed,
-.chart-container .vega-embed{
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-
-/* Ensure inner drawing surfaces never overflow the card */
-.map-container svg,
-.map-container canvas,
-.chart-container svg,
-.chart-container canvas{
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-
+/* Vega embeds: responsive and clean */
+.vega-embed{ margin: 0 !important; }
+.vega-embed *{ padding: revert !important; }  /* allow internal padding for axes/legends */
 .vega-embed .vega-actions{ display: none !important; }
+.map-container .vega-embed,
+.chart-container .vega-embed,
+.map-container svg, .map-container canvas,
+.chart-container svg, .chart-container canvas{
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
 
-/* Bindings */
+/* Map slider position inside padded card */
 .map-container .vega-bindings{
   position: absolute;
-  top: 10px;
-  left: 12px;
+  top: 14px;
+  left: 16px;
   z-index: 3;
   background: rgba(255,255,255,0.9);
   border: 1px solid #e5e7eb;
@@ -142,28 +130,18 @@ header p{
   color: var(--ink);
 }
 
+/* Bindings for other charts sit snugly above plots */
+.chart-container .vega-bindings{ margin: 8px 12px 0 12px; }
 
+/* Bar chart small nudges */
+#bar_vis .vega-bindings{ margin: 8px 12px 0 12px; }
 
-/* Area chart bindings: tuck up to the plot to avoid bottom gap */
-.chart-container .vega-bindings{
-  margin: 8px 12px 0 12px;       /* no negative margins; keeps layout tight */
+/* Vega tooltip positioning (avoid offset/clipping from padded cards) */
+.vega-tooltip{
+  position: fixed !important;
+  z-index: 9999 !important;
+  pointer-events: none;
 }
-
-
-/* === Bar chart fixes === */
-#bar_vis .vega-embed,
-#bar_vis svg,
-#bar_vis canvas {
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-#bar_vis .vega-actions { display: none !important; }
-#bar_vis .vega-bindings { margin: 8px 12px 0 12px; }
-
-
-#bar_vis .vega-actions { display: none !important; }
-
 
 /* ===============================
    Text cards
@@ -183,12 +161,10 @@ header p{
   margin: 6px 0 8px;
   font-size: 1.2rem;
 }
-.text-container ul{
-  margin: 8px 0 10px 18px;
-}
+.text-container ul{ margin: 8px 0 10px 18px; }
 
 /* ===============================
-   Tooltip helpers
+   Tooltip helpers (info popovers)
    =============================== */
 .tooltip{ position: relative; display: inline-block; cursor: pointer; color: var(--brand-1); }
 .tooltip .tooltip-text{
@@ -223,6 +199,7 @@ footer{
 footer a{ color: var(--accent); text-decoration: none; font-weight: 700; }
 footer a:hover{ text-decoration: underline; }
 
+/* Simple hover popup in footer */
 .popup-container{ position: relative; display: inline-block; cursor: pointer; }
 .popup-content{
   display: none;
@@ -238,36 +215,6 @@ footer a:hover{ text-decoration: underline; }
   width: 260px;
 }
 .popup-container:hover .popup-content{ display: block; }
-
-/* === Fix: charts getting cut off === */
-
-/* 1) Give every card a little inner space so axes/legends aren't on the edge */
-.map-container,
-.chart-container{
-  padding: 12px 14px;           /* was 0 */
-  overflow: hidden;              /* safe with the padding added */
-}
-
-/* 2) Stop removing padding from ALL Vega internals.
-      Keep margin reset, but restore child padding so Vega can lay out axes/legends. */
-.vega-embed{ margin: 0 !important; }
-.vega-embed *{ padding: revert !important; }   /* <-- replaces your old 'padding:0' hammer */
-
-/* 3) Keep the embed sizing sane */
-.map-container .vega-embed,
-.chart-container .vega-embed{
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-
-/* 4) Nudge the FRP slider after adding card padding */
-.map-container .vega-bindings{
-  position: absolute;
-  top: 14px;                     /* was 10px */
-  left: 16px;                    /* was 12px */
-}
-
 
 /* ===============================
    Responsive
