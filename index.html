@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Australian Bushfires</title>
 
   <!-- Vega libraries -->
@@ -10,8 +10,8 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@f710b46d39c437cbdfde15318e6938c7887dbc45/css/style.css?v=2025-10-17-1208">
+  <!-- Stylesheet (bump v= when you update CSS) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/css/style.css?v=fix-cutoff-02">
 </head>
 
 <body>
@@ -21,11 +21,11 @@
     <p>A Visual Exploration of Australia's Bushfire Activity</p>
   </header>
 
-  <!-- Main Section -->
+  <!-- Main -->
   <section class="main-content">
     <div class="container-large">
 
-      <!-- Map -->
+      <!-- ========== Map ========== -->
       <h1>Hotspot Intensity and Distribution</h1>
       <div class="sub-container">
         <div class="map-container" id="map_vis"></div>
@@ -33,129 +33,134 @@
           <h2>About the Map</h2>
           <p>
             This interactive map visualises <strong>satellite-detected fire hotspots</strong> across Australia.
-            Each circle marks a detection, with colour intensity representing <strong>Fire Radiative Power (FRP)</strong>
-            - a measure of fire strength - and size corresponding to scan width.
+            Colour encodes <strong>Fire Radiative Power (FRP)</strong>; size corresponds to scan width.
           </p>
           <ul>
-            <li>Fire clusters appear along northern and eastern regions.</li>
-            <li>Higher FRP values occur where drought is prolonged.</li>
-            <li>Hover to reveal fire details such as brightness and energy.</li>
+            <li>Clusters appear along northern and eastern regions.</li>
+            <li>Higher FRP where drought persists.</li>
+            <li>Hover for brightness and energy.</li>
           </ul>
           <div class="tooltip">
             <strong>Hover here for chart elements</strong>
             <div class="tooltip-text">
-              <p><span>FRP Slider:</span> Adjust fire intensity threshold.</p>
-              <p><span>Interactive Points:</span> Hover for fire details.</p>
-              <p><span>Colour Encoding:</span> Yellow -> Red for intensity.</p>
-              <p><span>Legend:</span> Shows fire size and FRP scale.</p>
+              <p><span>FRP Slider:</span> Adjust intensity threshold.</p>
+              <p><span>Legends:</span> Fire size and FRP scale.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Area Chart -->
+      <!-- ========== Stacked Area (Day vs Night) ========== -->
       <h1>Hotspot Counts Over Time</h1>
       <div class="sub-container">
         <div class="text-container">
           <h2>About the Chart</h2>
           <p>
-            This stacked area chart shows <strong>daily hotspot counts</strong> split by
-            <strong>Day</strong> and <strong>Night</strong>.  
-            The dropdown below filters between periods, and a dashed line highlights the peak day.
+            Stacked area of <strong>daily hotspot counts</strong> split by <strong>Day</strong> and <strong>Night</strong>.
+            Dropdown filters period; dashed line marks peak.
           </p>
           <ul>
-            <li>Daytime detections dominate throughout the season.</li>
-            <li>Night detections spike alongside major events.</li>
-            <li>Peak recorded: September 10 with 1300+ hotspots.</li>
+            <li>Day dominates through most of the season.</li>
+            <li>Night spikes align with major events.</li>
+            <li>Peak day annotated.</li>
           </ul>
           <div class="tooltip">
             <strong>Hover here for chart elements</strong>
             <div class="tooltip-text">
-              <p><span>Dropdown Filter:</span> Select All / Day / Night.</p>
-              <p><span>Tooltips:</span> View exact counts and dates.</p>
-              <p><span>Annotation:</span> Peak day marked by dashed line.</p>
+              <p><span>Dropdown:</span> All / Day / Night.</p>
+              <p><span>Tooltips:</span> Exact counts and dates.</p>
             </div>
           </div>
         </div>
         <div class="chart-container" id="area_vis"></div>
       </div>
 
-      
+      <!-- ========== Heatmap (Risk by Month/State) ========== -->
       <h1>Fire Risk by Month and State</h1>
       <div class="sub-container">
         <div class="chart-container" id="heatmap_vis"></div>
         <div class="text-container">
           <h2>About the Heatmap</h2>
           <p>
-            This heatmap visualises <strong>fire risk intensity</strong> across Australian states throughout the year.
-            Each cell's colour shows relative fire danger from <strong>0 (low)</strong> to <strong>1 (high)</strong>.
+            Relative <strong>fire risk intensity</strong> by state and month (0 = low, 1 = high).
           </p>
           <ul>
-            <li>Fire risk peaks in <strong>summer months (Dec-Feb)</strong>.</li>
-            <li>Southern states stay cooler with lower risk.</li>
-            <li>NT & QLD show long high-risk dry seasons.</li>
+            <li>Risk peaks in summer (Dec-Feb).</li>
+            <li>Southern states generally cooler.</li>
+            <li>NT &amp; QLD show long dry seasons.</li>
           </ul>
           <div class="tooltip">
             <strong>Hover here for chart elements</strong>
             <div class="tooltip-text">
-              <p><span>Colour Gradient:</span> Darker blue = higher risk.</p>
-              <p><span>Tooltips:</span> Show state, month & risk value.</p>
-              <p><span>Month Order:</span> Chronological Jan-Dec.</p>
+              <p><span>Gradient:</span> Darker = higher risk.</p>
+              <p><span>Tooltips:</span> State, month, value.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Forest Area vs Burnt Area (by tenure) -->
+      <!-- ========== Stacked Bars (Total vs Burnt) ========== -->
       <h1>Forest Area vs Burnt Area</h1>
-<div class="sub-container">
-  <div class="text-container">
-    <h2>About the Chart</h2>
-    <p>
-      This chart compares each state's <strong>total forest area</strong> with the
-      <strong>burnt portion</strong> during the 2019-2020 bushfire season.
-    </p>
-    <ul>
-      <li><strong>NSW and Victoria</strong> experienced the largest losses - over 6 million ha combined burnt.</li>
-      <li><strong>WA and QLD</strong> had extensive forests but relatively low burnt percentages.</li>
-      <li><strong>ACT</strong> had the highest proportion burnt relative to size (around 64%).</li>
-      <li>Nationally, about <strong>6% of all native forests</strong> were affected.</li>
-    </ul>
-    <div class="tooltip">
+      <div class="sub-container">
+        <div class="text-container">
+          <h2>About the Chart</h2>
+          <p>
+            Each bar shows a state's <strong>total native forest area</strong> with the
+            <strong>burnt portion</strong> stacked inside it. Use the dropdown to switch
+            <em>forest tenure</em>.
+          </p>
+          <ul>
+            <li>NSW &amp; VIC had the largest absolute losses.</li>
+            <li>WA &amp; QLD have low burnt percentages relative to size.</li>
+            <li>ACT has the highest proportion burnt relative to area.</li>
+            <li>Nationally, ~6% of native forests were affected.</li>
+          </ul>
+          <div class="tooltip">
             <strong>Hover here for chart elements</strong>
             <div class="tooltip-text">
-              <p><span>Bars:</span> total native forest area (in thousand hectares).</p>
-              <p><span>Tooltips:</span> Show exact values per state.</p>
-              <p><span>Proportions:</span> Red shows burnt portion; teal shows remaining unburnt area.</p>
-  </div>
-  <div class="chart-container" id="bar_vis"></div>
-</div>
+              <p><span>Dropdown:</span> Select forest tenure.</p>
+              <p><span>Legend:</span> Teal = unburnt, Red = burnt.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container" id="bar_vis"></div>
+      </div>
 
-
-    </div> 
+    </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <p> 2025 Australian Bushfires</p>
+    <p>2025 Australian Bushfires</p>
     <div class="popup-container">
       <p class="hover-text">Data Sources</p>
       <div class="popup-content">
         <ul class="footer-links">
-          <li><a href="https://www.kaggle.com/datasets/carlosparadis/fires-from-space-australia-and-new-zeland" target="_blank">Fires from Space: Australia and New Zealand</a> - Satellite hotspot detections.</li>
-          <li><a href="https://www.kaggle.com/datasets/kkhandekar/australian-forest-fire-area-20192020/data" target="_blank">Australian Forest Fire Area 2019-2020</a> - Forest and burnt area data.</li>
+          <li><a href="https://www.kaggle.com/datasets/carlosparadis/fires-from-space-australia-and-new-zeland" target="_blank">Fires from Space: Australia and New Zealand</a></li>
+          <li><a href="https://www.kaggle.com/datasets/kkhandekar/australian-forest-fire-area-20192020/data" target="_blank">Australian Forest Fire Area 2019-2020</a></li>
         </ul>
       </div>
     </div>
   </footer>
 
-  <!-- Vega Embeds -->
-    <script>
-      vegaEmbed('#map_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json',{actions:false});
-      vegaEmbed('#area_vis','https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json',{actions:false});
-      vegaEmbed('#heatmap_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/heatmap.json',{actions:false});
-      vegaEmbed('#bar_vis', 'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@11eb8dbfd7e6691c62e2658d926a855c3cb36d5f/charts/barchart.json?v=2025-10-17-1811', {actions:false}).catch(console.error);
-    </script>
+  <!-- Embeds (add ?v= when updating specs to avoid cache) -->
+  <script>
+    vegaEmbed('#map_vis',
+      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json?v=2025-10-17-1859',
+      { actions:false }).catch(console.error);
 
+    vegaEmbed('#area_vis',
+      'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json?v=2025-10-17-1859',
+      { actions:false }).catch(console.error);
+
+    vegaEmbed('#heatmap_vis',
+      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/heatmap.json?v=2025-10-17-1859',
+      { actions:false }).catch(console.error);
+
+    /* Last chart uses raw+version so the tenure dropdown and latest changes always load */
+    vegaEmbed('#bar_vis',
+      'https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/barchart.json?v=2025-10-17-1859',
+      { actions:false }).catch(console.error);
+  </script>
 </body>
 </html>
