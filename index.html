@@ -106,6 +106,34 @@
         </div>
       </div>
 
+      <!-- Forest Area vs Burnt Area (by tenure) -->
+      <h1>Forest Area vs Burnt Area (by Tenure)</h1>
+      <div class="sub-container">
+        <div class="text-container">
+          <h2>About the Bar Chart</h2>
+          <p>
+            Each horizontal bar shows the <strong>total native forest area</strong> per state, with the
+            <strong>burnt portion stacked</strong> inside it. Use the dropdown to switch
+            between <em>Total native forest</em> and specific <em>forest tenures</em>
+            (e.g., Nature conservation reserve, Private forest).
+          </p>
+          <ul>
+            <li><strong>Stacking:</strong> Burnt area sits on top of unburnt to form the total.</li>
+            <li><strong>Filter:</strong> Select a forest tenure to update all bars.</li>
+            <li><strong>Tooltips:</strong> Show exact totals and segment values.</li>
+          </ul>
+          <div class="tooltip">
+            <strong>Hover here for chart elements</strong>
+            <div class="tooltip-text">
+              <p><span>Dropdown:</span> Switch tenure categories.</p>
+              <p><span>Colours:</span> Light teal = unburnt, warm red = burnt.</p>
+              <p><span>Sorting:</span> States listed ACT -> WA.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container" id="bar_vis"></div>
+      </div>
+
     </div> 
   </section>
 
@@ -124,10 +152,12 @@
   </footer>
 
   <!-- Vega Embeds -->
-  <script>
-    vegaEmbed('#map_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json',{actions:false});
-    vegaEmbed('#area_vis','https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json',{actions:false});
-    vegaEmbed('#heatmap_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/heatmap.json',{actions:false});
-  </script>
+    <script>
+      vegaEmbed('#map_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json',{actions:false});
+      vegaEmbed('#area_vis','https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json',{actions:false});
+      vegaEmbed('#heatmap_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/heatmap.json',{actions:false});
+      vegaEmbed('#bar_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/barchart.json',{actions:false});
+    </script>
+
 </body>
 </html>
