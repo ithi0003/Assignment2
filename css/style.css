@@ -102,7 +102,7 @@ header p{
 /* Map: allow natural height from the spec but keep a safe minimum */
 .map-container{
   position: relative;
-  min-height: 620px;              
+  min-height: 620px;              /* matches your map spec =619px */
 }
 
 /* Make all Vega roots truly responsive inside cards */
