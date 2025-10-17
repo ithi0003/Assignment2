@@ -123,11 +123,6 @@ header p{
   display: block !important;
 }
 
-/* Remove any default paddings/margins Vega-Embed might inject */
-.vega-embed, .vega-embed *{
-  margin: 0 !important;
-  padding: 0 !important;
-}
 .vega-embed .vega-actions{ display: none !important; }
 
 /* Bindings */
@@ -243,6 +238,36 @@ footer a:hover{ text-decoration: underline; }
   width: 260px;
 }
 .popup-container:hover .popup-content{ display: block; }
+
+/* === Fix: charts getting cut off === */
+
+/* 1) Give every card a little inner space so axes/legends aren't on the edge */
+.map-container,
+.chart-container{
+  padding: 12px 14px;           /* was 0 */
+  overflow: hidden;              /* safe with the padding added */
+}
+
+/* 2) Stop removing padding from ALL Vega internals.
+      Keep margin reset, but restore child padding so Vega can lay out axes/legends. */
+.vega-embed{ margin: 0 !important; }
+.vega-embed *{ padding: revert !important; }   /* <-- replaces your old 'padding:0' hammer */
+
+/* 3) Keep the embed sizing sane */
+.map-container .vega-embed,
+.chart-container .vega-embed{
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+/* 4) Nudge the FRP slider after adding card padding */
+.map-container .vega-bindings{
+  position: absolute;
+  top: 14px;                     /* was 10px */
+  left: 16px;                    /* was 12px */
+}
+
 
 /* ===============================
    Responsive
