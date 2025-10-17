@@ -154,11 +154,8 @@ header p{
   margin: 8px 12px 0 12px;       /* no negative margins; keeps layout tight */
 }
 
-/* === Bar chart tweaks === */
-#bar_vis .vega-bindings {
-  margin: 8px 12px 0 12px;     /* keep the dropdown snug above the chart */
-}
 
+/* === Bar chart fixes === */
 #bar_vis .vega-embed,
 #bar_vis svg,
 #bar_vis canvas {
@@ -166,6 +163,9 @@ header p{
   height: auto !important;
   display: block !important;
 }
+#bar_vis .vega-actions { display: none !important; }
+#bar_vis .vega-bindings { margin: 8px 12px 0 12px; }
+
 
 #bar_vis .vega-actions { display: none !important; }
 

@@ -107,32 +107,27 @@
       </div>
 
       <!-- Forest Area vs Burnt Area (by tenure) -->
-      <h1>Forest Area vs Burnt Area (by Tenure)</h1>
-      <div class="sub-container">
-        <div class="text-container">
-          <h2>About the Bar Chart</h2>
-          <p>
-            Each horizontal bar shows the <strong>total native forest area</strong> per state, with the
-            <strong>burnt portion stacked</strong> inside it. Use the dropdown to switch
-            between <em>Total native forest</em> and specific <em>forest tenures</em>
-            (e.g., Nature conservation reserve, Private forest).
-          </p>
-          <ul>
-            <li><strong>Stacking:</strong> Burnt area sits on top of unburnt to form the total.</li>
-            <li><strong>Filter:</strong> Select a forest tenure to update all bars.</li>
-            <li><strong>Tooltips:</strong> Show exact totals and segment values.</li>
-          </ul>
-          <div class="tooltip">
-            <strong>Hover here for chart elements</strong>
-            <div class="tooltip-text">
-              <p><span>Dropdown:</span> Switch tenure categories.</p>
-              <p><span>Colours:</span> Light teal = unburnt, warm red = burnt.</p>
-              <p><span>Sorting:</span> States listed ACT -> WA.</p>
-            </div>
-          </div>
-        </div>
-        <div class="chart-container" id="bar_vis"></div>
-      </div>
+      <h1>Forest Area vs Burnt Area (Total Native Forest)</h1>
+<div class="sub-container">
+  <div class="text-container">
+    <h2>About the Chart</h2>
+    <p>
+      This chart compares each state's <strong>total forest area</strong> with the
+      <strong>burnt portion</strong> during the 2019-2020 bushfire season.
+    </p>
+    <ul>
+      <li>Each bar = total native forest area (in thousand hectares).</li>
+      <li>Red shows burnt portion; teal shows remaining unburnt area.</li>
+      <li><strong>NSW and Victoria</strong> experienced the largest losses - over 6 million ha combined burnt.</li>
+      <li><strong>WA and QLD</strong> had extensive forests but relatively low burnt percentages.</li>
+      <li><strong>ACT</strong> had the highest proportion burnt relative to size (around 64%).</li>
+      <li>Nationally, about <strong>6% of all native forests</strong> were affected.</li>
+      <li>Hover to see exact values per state.</li>
+    </ul>
+  </div>
+  <div class="chart-container" id="bar_vis"></div>
+</div>
+
 
     </div> 
   </section>
@@ -156,7 +151,7 @@
       vegaEmbed('#map_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/map.json',{actions:false});
       vegaEmbed('#area_vis','https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/area_chart.json',{actions:false});
       vegaEmbed('#heatmap_vis','https://raw.githubusercontent.com/ithi0003/Assignment2/main/charts/heatmap.json',{actions:false});
-      vegaEmbed('#bar_vis','https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/barchart.json?v=2025-10-17-1232',{actions:false});
+      vegaEmbed('#bar_vis', 'https://cdn.jsdelivr.net/gh/ithi0003/Assignment2@main/charts/barchart.json?v=2025-10-17-1335', {actions:false}).catch(console.error);
     </script>
 
 </body>

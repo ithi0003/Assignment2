@@ -1,97 +1,47 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Stacked bar chart: total native forest area vs burnt area by state, filterable by forest tenure.",
+  "description": "Stacked bar chart: total vs burnt forest area by state",
   "data": {
     "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/table3.csv"
   },
-
-  "params": [
-    {
-      "name": "tenure",
-      "value": "Total native forest",
-      "bind": {
-        "input": "select",
-        "options": [
-          "Total native forest",
-          "Leasehold forest",
-          "Multiple-use public forest",
-          "Nature conservation reserve",
-          "Other Crown land",
-          "Private forest",
-          "Unresolved tenure"
-        ],
-        "name": "Forest tenure: "
-      }
-    }
-  ],
-
   "transform": [
-    { "filter": "datum['Forest tenure'] == tenure" },
-
-    { "fold": ["ACT","NSW","NT","Qld","SA","Tas","Vic","WA"], "as": ["State","Total"] },
-
-    { "calculate": "toNumber(datum['Burnt' + datum.State])", "as": "Burnt" },
-    { "calculate": "max(toNumber(datum.Total) - toNumber(datum.Burnt), 0)", "as": "Unburnt" },
-
-    { "fold": ["Unburnt", "Burnt"], "as": ["Part", "Area"] },
-
+    {"filter": "datum['Forest tenure'] == 'Total native forest'"},
+    {"fold": ["ACT","NSW","NT","Qld","SA","Tas","Vic","WA"], "as": ["State","Total"]},
+    {"calculate": "toNumber(datum['Burnt' + datum.State])", "as": "Burnt"},
+    {"calculate": "max(toNumber(datum.Total) - toNumber(datum.Burnt), 0)", "as": "Unburnt"},
+    {"fold": ["Unburnt","Burnt"], "as": ["Part","Area"]},
     {
-      "calculate": "({'ACT':'Australian Capital Territory','NSW':'New South Wales','NT':'Northern Territory','Qld':'Queensland','SA':'South Australia','Tas':'Tasmania','Vic':'Victoria','WA':'Western Australia'})[datum.State]",
-      "as": "StateFull"
+      "calculate": "({'ACT':'ACT','NSW':'NSW','NT':'NT','Qld':'QLD','SA':'SA','Tas':'TAS','Vic':'VIC','WA':'WA'})[datum.State]",
+      "as": "StateShort"
     }
   ],
-
-  "width": 680,
-  "height": 520,
-
-  "mark": { "type": "bar" },
-
+  "width": 700,
+  "height": 500,
+  "mark": {"type": "bar"},
   "encoding": {
-    "y": {
-      "field": "StateFull",
-      "type": "ordinal",
-      "sort": [
-        "Australian Capital Territory",
-        "New South Wales",
-        "Northern Territory",
-        "Queensland",
-        "South Australia",
-        "Tasmania",
-        "Victoria",
-        "Western Australia"
-      ],
-      "title": null
-    },
+    "y": {"field": "StateShort", "type": "ordinal", "title": "State"},
     "x": {
       "field": "Area",
       "type": "quantitative",
-      "title": "Area (thousand hectares)"
+      "title": "Forest area (thousand hectares)"
     },
     "color": {
       "field": "Part",
       "type": "nominal",
-      "scale": { "domain": ["Unburnt", "Burnt"], "range": ["#A8DADC", "#E76F51"] },
-      "title": null
+      "scale": {"domain": ["Unburnt", "Burnt"], "range": ["#A8DADC", "#E76F51"]},
+      "title": "Area Type",
+      "legend": {"orient": "top", "direction": "horizontal"}
     },
     "tooltip": [
-      { "field": "StateFull", "type": "nominal", "title": "State" },
-      { "field": "Total", "type": "quantitative", "title": "Total forest area" },
-      { "field": "Burnt", "type": "quantitative", "title": "Burnt area" },
-      { "field": "Unburnt", "type": "quantitative", "title": "Unburnt area" },
-      { "field": "Part", "type": "nominal", "title": "Segment" },
-      { "field": "Area", "type": "quantitative", "title": "Segment area" }
+      {"field": "StateShort", "title": "State"},
+      {"field": "Total", "title": "Total forest (k ha)"},
+      {"field": "Burnt", "title": "Burnt (k ha)"},
+      {"field": "Unburnt", "title": "Unburnt (k ha)"}
     ]
   },
-
   "config": {
-    "view": { "stroke": null },
-    "axis": {
-      "labelFont": "Open Sans",
-      "titleFont": "Poppins"
-    },
-    "legend": {
-      "labelFont": "Open Sans",
-      "titleFont": "Poppins"
-    }
+    "bar": {"size": 30},
+    "axis": {"labelFont": "Open Sans", "titleFont": "Poppins"},
+    "legend": {"labelFont": "Open Sans", "titleFont": "Poppins"}
   }
 }
