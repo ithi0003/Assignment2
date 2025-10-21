@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 600,
+  "width": 750,
   "height": 619,
   "projection": {
     "type": "mercator",
@@ -52,7 +52,7 @@
         "url": "https://raw.githubusercontent.com/ithi0003/Assignment2/main/data/fire_archive_M6_96619.csv"
       },
       "transform": [
-        { "filter": "toNumber(datum.confidence) > 70 " },
+        { "filter": "toNumber(datum.confidence) > 70 && toNumber(datum.frp) > frpThreshold" },
         { "calculate": "toNumber(datum.longitude)", "as": "lonNum" },
         { "calculate": "toNumber(datum.latitude)", "as": "latNum" },
         { "calculate": "toNumber(datum.frp)", "as": "frpNum" },
